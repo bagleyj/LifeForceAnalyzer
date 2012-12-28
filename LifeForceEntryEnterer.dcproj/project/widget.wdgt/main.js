@@ -5,8 +5,8 @@
  */
 
 var gFolderKey = "energy-folder";
-var gSystemCommand; // pending append command
-
+var gSystemCommand; // pending append command - no
+var gEntry;
 
 
 //
@@ -148,6 +148,48 @@ function endBack(event)
 }
 
 
+function updateAmount(bcOutput)
+{
+   var result = bcOutput.replace('\n','');
+   if (-1 == result.indexOf('.'))
+   {
+      result += '.00';
+   }
+   document.getElementById('fAmount').value = '$' + result;
+}
+
+
+function endBcProcessing(bc)
+{
+   if (typeof bc == 'object' && bc.outputString != 'undefined' && bc.outputString)
+   {
+      console.log('bc output: ' + bc.outputString);
+      updateAmount(bc.outputString);
+   }
+}
+
+
+function processAmountCalculation(event)
+{
+   amountField = document.getElementById('fAmount');
+   
+//function processAmountCalculation(amountField)
+//{
+   var amount = amountField.value;
+   if (amount[0] == '=')
+   {
+      // Pass the calculation to end handler.
+      var calculation = amount.substring(1, amount.length);
+      console.log(calculation);
+      
+      var command = '/bin/echo "scale=2;' + calculation + '" | /usr/bin/bc -q';
+      widget.system(command, endBcProcessing);
+   }
+   
+   return true;
+}
+
+
 //
 // Function: showFront(event)
 // Called when the done button is clicked from the back of the widget
@@ -190,10 +232,12 @@ function validateAll(event)
    var payeeEntered = validateValueExists(document.getElementById('fPayee'));
    var accountsEntered = validateValueExists(document.getElementById('fAccounts'));
    
-   var amountIsValid = validateAmount(document.getElementById('fAmount'));
-   
+   // If the amount field contains a calculation starting with '=' and use bc
+   // system command to handle it if so.
+   var amountIsValid = processAmountCalculation(document.getElementById('fAmount'));
+
    var doEnableEnter = (dateIsValid && payeeEntered &&
-    accountsEntered && amountIsValid);
+    accountsEntered);
     
    //enterButton.object.setEnabled(doEnableEnter);
    
@@ -273,11 +317,14 @@ function appendDone(command)
    var resultsField = document.getElementById('fResults');
    if (command.errorString == undefined)
    {
-      resultsFiled.innerText = "Success.";
+      resultsField.value = "Successfully appended."
+      resultsField.style.backgroundColor = '#afb'; // green
    }
    else
    {
-      resultsField.innerText = command.errorString;
+      resultsField.value = command.errorString;
+      resultsField.style.backgroundColor = '#fba'; // red
+
    }
    delete gSystemCommand;
    gSystemCommand = null;
@@ -300,7 +347,7 @@ function appendEntryAndShowResult(event)
    // Quote the dollar sign to prevent interpreting it as a var in shell.
    amount = "\\" + amount;
    
-   var entry = dateField.value + '\t' + payeeField.value + '\t' +
+   gEntry = dateField.value + '\t' + payeeField.value + '\t' +
     accountsField.value + '\t' + amount;
    //console.log(entry);
    
@@ -311,9 +358,9 @@ function appendEntryAndShowResult(event)
    var filePath = folder + fileName;
    //console.log(filePath);
    
-   var command = "/bin/echo \"" + entry + "\" >> " + filePath;
+   var command = "/bin/echo \"" + gEntry + "\" >> " + filePath;
    console.log("Appending with command: " + command);
    
-   gSystemCommand = widget.system(command, appendDone).outputString;
+   gSystemCommand = widget.system(command, appendDone);
 }
 
