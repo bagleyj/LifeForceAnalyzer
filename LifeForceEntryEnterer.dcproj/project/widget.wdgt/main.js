@@ -155,6 +155,10 @@ function updateAmount(bcOutput)
    {
       result += '.00';
    }
+   if ('$' != result[0])
+   {
+      result = '$' + result;
+   }
    document.getElementById('fAmount').value = '$' + result;
 }
 
@@ -165,6 +169,7 @@ function endBcProcessing(bc)
    {
       console.log('bc output: ' + bc.outputString);
       updateAmount(bc.outputString);
+      validateAmount(document.getElementById('fAmount'));
    }
 }
 
@@ -172,9 +177,7 @@ function endBcProcessing(bc)
 function processAmountCalculation(event)
 {
    amountField = document.getElementById('fAmount');
-   
-//function processAmountCalculation(amountField)
-//{
+
    var amount = amountField.value;
    if (amount[0] == '=')
    {
@@ -185,8 +188,10 @@ function processAmountCalculation(event)
       var command = '/bin/echo "scale=2;' + calculation + '" | /usr/bin/bc -q';
       widget.system(command, endBcProcessing);
    }
-   
-   return true;
+   else
+   {
+      validateAmount(amountField);
+   }
 }
 
 
@@ -223,6 +228,11 @@ if (window.widget) {
 
 function validateAll(event)
 {
+   // Reset results area
+   var fResults = document.getElementById('fResults');
+   setValidatedStyle(fResults, true);
+   fResults.innerText = "";
+   
    var enterButton = document.getElementById('fAppendEntry');
 
    //enterButton.object.setEnabled(false);
@@ -234,10 +244,10 @@ function validateAll(event)
    
    // If the amount field contains a calculation starting with '=' and use bc
    // system command to handle it if so.
-   var amountIsValid = processAmountCalculation(document.getElementById('fAmount'));
+   var amountIsValid = validateAmount(document.getElementById('fAmount'));
 
    var doEnableEnter = (dateIsValid && payeeEntered &&
-    accountsEntered);
+    accountsEntered && amountIsValid);
     
    //enterButton.object.setEnabled(doEnableEnter);
    
@@ -317,12 +327,12 @@ function appendDone(command)
    var resultsField = document.getElementById('fResults');
    if (command.errorString == undefined)
    {
-      resultsField.value = "Successfully appended."
+      resultsField.innerText = gEntry;
       resultsField.style.backgroundColor = '#afb'; // green
    }
    else
    {
-      resultsField.value = command.errorString;
+      resultsField.innerText = command.errorString;
       resultsField.style.backgroundColor = '#fba'; // red
 
    }

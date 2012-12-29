@@ -10,13 +10,14 @@ var dashcodePartSpecs = {
     "dateLabel": { "text": "Date:", "view": "DC.Text" },
     "done": { "creationFunction": "CreateGlassButton", "onclick": "endBack", "text": "Done" },
     "fAppendEntry": { "creationFunction": "CreateButton", "leftImageWidth": 10, "onclick": "appendEntryAndShowResult", "rightImageWidth": 10, "text": "Append Entry" },
-    "fResults": { "text": "results", "view": "DC.Text" },
+    "fResults": { "view": "DC.Text" },
     "info": { "backgroundStyle": "black", "creationFunction": "CreateInfoButton", "foregroundStyle": "white", "frontID": "front", "onclick": "showBack" },
     "payeeLabel": { "text": "Payee:", "view": "DC.Text" },
     "resultsLabel": { "text": "Results:", "view": "DC.Text" },
     "text": { "text": "Energy File Folder:", "view": "DC.Text" },
     "Title": { "text": "LIFE FORCE ENTRY ENTERER", "view": "DC.Text" }
 };
+
 
 
 

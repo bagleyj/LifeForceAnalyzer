@@ -12,6 +12,8 @@
 			<string>image-theme: 3; image-shape: 3; image-opacity: 0.19; image-top-color: 1,1,1,1; image-bottom-color: 0.6154,0.6154,0.6154,1; image-radius: 18,18,18,18; image-border: 1; image-border-color: 0.5294,0.5294,0.5294,1; image-border-width: 1; shine-strength: 0.90; shine-alpha-level: 0.67; shine-height: 0.50; glass-arc-height: 0.06; shadow-include-shadow: 0;</string>
 			<key>AppIconIncludeFGImage</key>
 			<true/>
+			<key>CYBackwardCompatibleExport</key>
+			<false/>
 			<key>CYShineVersion</key>
 			<integer>2</integer>
 			<key>MainCSS</key>

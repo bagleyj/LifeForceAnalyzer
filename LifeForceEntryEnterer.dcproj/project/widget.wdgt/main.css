@@ -17,6 +17,8 @@ body {
     bottom: 0px;
     width: auto;
     height: auto;
+    font-family: automat;
+    font-size: 10pt;
 }
 
 #info {
@@ -244,16 +246,16 @@ body {
     font-size: 12px;
     font-family: Geneva;
     padding: 2px;
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
     background-color: rgb(231, 231, 231);
     border-style: inset;
     width: 222px;
     margin-right: auto;
     margin-bottom: auto;
     height: 27px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .selected #fResults {
