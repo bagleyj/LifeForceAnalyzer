@@ -155,11 +155,8 @@ function updateAmount(bcOutput)
    {
       result += '.00';
    }
-   if ('$' != result[0])
-   {
-      result = '$' + result;
-   }
-   document.getElementById('fAmount').value = '$' + result;
+   // Let the final entry creation code add the dollar sign.
+   document.getElementById('fAmount').value = result;
 }
 
 
@@ -235,7 +232,7 @@ function validateAll(event)
    
    var enterButton = document.getElementById('fAppendEntry');
 
-   //enterButton.object.setEnabled(false);
+   enterButton.object.setProperty('enabled', false);
    
    var dateIsValid = validateDate(document.getElementById('fDate'));
 
@@ -350,7 +347,7 @@ function appendEntryAndShowResult(event)
    var accountsField = document.getElementById('fAccounts');
    var amountField = document.getElementById('fAmount');
    var amount = amountField.value;
-   if (amount[0] != '$')
+   if ('$' != amount[0])
    {
       amount = '$' + amount;
    }
